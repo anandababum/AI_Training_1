@@ -1,4 +1,5 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import os
 
 HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -477,6 +478,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         print(f"[{self.address_string()}] {format % args}")
 
 if __name__ == '__main__':
-    server = HTTPServer(('0.0.0.0', 6543), DashboardHandler)
-    print('Dashboard running on http://localhost:6543')
+    port = int(os.environ.get('PORT', 6543))
+    server = HTTPServer(('0.0.0.0', port), DashboardHandler)
+    print(f'Dashboard running on http://0.0.0.0:{port}')
     server.serve_forever()
