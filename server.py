@@ -86,6 +86,34 @@ HTML = """<!DOCTYPE html>
       position: relative;
       height: 320px;
     }
+    .trend-card {
+      max-width: 1300px;
+      margin: 0 auto 32px;
+    }
+    .trend-card .chart-container {
+      height: 360px;
+    }
+    .legend-inline {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+    }
+    .legend-line {
+      width: 28px;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .legend-line.dashed {
+      background: repeating-linear-gradient(90deg, #f472b6 0, #f472b6 6px, transparent 6px, transparent 10px);
+    }
     .table-card {
       max-width: 1300px;
       margin: 0 auto;
@@ -172,6 +200,21 @@ HTML = """<!DOCTYPE html>
     <div class="chart-container">
       <canvas id="doughnutChart"></canvas>
     </div>
+  </div>
+</div>
+
+<div class="card trend-card">
+  <h2>CRM Market Growth 2020 &ndash; 2032 (USD Billions)</h2>
+  <div class="legend-inline">
+    <div class="legend-item">
+      <div class="legend-line" style="background:#38bdf8"></div>Historical (Actual)
+    </div>
+    <div class="legend-item">
+      <div class="legend-line dashed"></div>Forecast (Projected &bull; CAGR ~11.9%)
+    </div>
+  </div>
+  <div class="chart-container">
+    <canvas id="trendChart"></canvas>
   </div>
 </div>
 
@@ -302,6 +345,81 @@ HTML = """<!DOCTYPE html>
       scales: {
         x: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1e293b' } },
         y: { ticks: { color: '#94a3b8', callback: v => v + '%' }, grid: { color: '#334155' } }
+      }
+    }
+  });
+
+  // Trend line chart
+  const years = ['2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030','2031','2032'];
+  // Historical actuals (2020-2025), null for forecast years
+  const historical = [40.2, 47.3, 57.8, 80.0, 91.3, 112.9, null, null, null, null, null, null, null];
+  // Forecast (2025-2032), null for purely historical years
+  const forecast   = [null, null, null, null, null, 112.9, 126.4, 141.5, 158.4, 177.3, 198.4, 222.0, 248.5];
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: 'Historical',
+          data: historical,
+          borderColor: '#38bdf8',
+          backgroundColor: 'rgba(56,189,248,0.12)',
+          pointBackgroundColor: '#38bdf8',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          spanGaps: false,
+        },
+        {
+          label: 'Forecast',
+          data: forecast,
+          borderColor: '#f472b6',
+          backgroundColor: 'rgba(244,114,182,0.08)',
+          pointBackgroundColor: '#f472b6',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 3,
+          borderDash: [8, 4],
+          fill: true,
+          tension: 0.4,
+          spanGaps: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' ' + ctx.dataset.label + ': $' + ctx.parsed.y + 'B'
+          }
+        },
+        annotation: {}
+      },
+      scales: {
+        x: {
+          ticks: { color: '#94a3b8', font: { size: 11 } },
+          grid: { color: '#334155' }
+        },
+        y: {
+          ticks: {
+            color: '#94a3b8',
+            callback: v => '$' + v + 'B'
+          },
+          grid: { color: '#334155' },
+          title: {
+            display: true,
+            text: 'Market Size (USD Billions)',
+            color: '#64748b',
+            font: { size: 11 }
+          }
+        }
       }
     }
   });
