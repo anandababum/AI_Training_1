@@ -5,7 +5,7 @@ HTML = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Global CRM Market Share Dashboard 2025</title>
+  <title>This is dashboard designed by Pavi</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -176,7 +176,7 @@ HTML = """<!DOCTYPE html>
 <body>
 
 <header>
-  <h1>Global CRM Market Share Dashboard 2025</h1>
+  <h1>This is dashboard designed by Pavi</h1>
   <p>Top 10 CRM Platforms &mdash; Global market data &bull; Total market size: $112.91B</p>
 </header>
 
