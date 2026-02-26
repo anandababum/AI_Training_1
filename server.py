@@ -458,10 +458,20 @@ HTML = """<!DOCTYPE html>
 
 class DashboardHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.end_headers()
-        self.wfile.write(HTML.encode('utf-8'))
+        if self.path == '/achievements':
+            import os
+            here = os.path.dirname(os.path.abspath(__file__))
+            with open(os.path.join(here, 'achievements.html'), 'rb') as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(body)
+        else:
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(HTML.encode('utf-8'))
 
     def log_message(self, format, *args):
         print(f"[{self.address_string()}] {format % args}")
